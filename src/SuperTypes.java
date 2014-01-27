@@ -1,0 +1,8 @@
+public enum SuperTypes {
+	ARTIFACT,
+	CREATURE,
+	ENCHANTMENT,
+	INSTANT,
+	LAND,
+	SORCERY
+}
