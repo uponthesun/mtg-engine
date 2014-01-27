@@ -1,4 +1,4 @@
-public enum SuperTypes {
+public enum SuperType {
 	ARTIFACT,
 	CREATURE,
 	ENCHANTMENT,
