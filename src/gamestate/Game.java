@@ -1,7 +1,6 @@
 package gamestate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 import turnstructure.Step;
 import turnstructure.Step.GivePriority;
@@ -16,7 +15,7 @@ import turnstructure.steps.EndCombat;
 import turnstructure.steps.MainPhase;
 import turnstructure.steps.Untap;
 import turnstructure.steps.Upkeep;
-import utils.Logger;
+import utils.IO;
 import utils.PrintUtils;
 
 public class Game {
@@ -72,12 +71,11 @@ public class Game {
 	public void gameLoop() {
 		this.initializeGame();
 		
-		Scanner scanner = new Scanner(System.in);
 		while(true) {
-			Logger.print("*** TURN %d ***", this.turnNumber);
+			IO.print("*** TURN %d ***", this.turnNumber);
 			this.takeTurn();
 			this.advanceTurn();
-			scanner.nextLine();
+			IO.readLine();
 		}
 	}
 
@@ -90,13 +88,13 @@ public class Game {
 	
 	private void takeTurn() {
 		for(Step currentStep : STANDARD_TURN_STEPS) {
-			Logger.print("-- %s step --", currentStep.getClass().getSimpleName());
+			IO.print("-- %s step --", currentStep.getClass().getSimpleName());
 			GivePriority givePriority = currentStep.beginningAction(this);
 			
 			this.printGame();
 			
 			if(givePriority == GivePriority.TRUE) {
-				Logger.print("Priority\n");
+				IO.print("Priority\n");
 			}
 		}
 	}
@@ -115,11 +113,11 @@ public class Game {
 			builder.append(String.format("- Player %d -\n", playerNumber));
 			builder.append(String.format("Life: %d\n", player.getLifeTotal()));
 			//builder.append(String.format("Library: %s\n", player.getLibrary()));
-			builder.append(String.format("Hand: %s\n", PrintUtils.cardsToString(player.getHand())));
+			builder.append(String.format("Hand: %s\n", PrintUtils.cardsToStringDeduped(player.getHand())));
 			builder.append(String.format("Permanents: %s\n", player.getPermanents()));
 			
 			playerNumber++;
 		}
-		Logger.print(builder.toString());
+		IO.print(builder.toString());
 	}
 }

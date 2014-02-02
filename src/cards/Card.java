@@ -76,4 +76,19 @@ public class Card {
 				.add("toughness", this.toughness)
 				.toString();*/
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if(o == null || !(o instanceof Card)) {
+			return false;
+		}
+		
+		Card c = (Card) o;
+		return this.getName().equals(c.getName());
+	}
+	
+	@Override
+	public int hashCode() {
+		return this.getName().hashCode();
+	}
 }
