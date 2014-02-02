@@ -1,16 +1,21 @@
+package gamestate;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+
+import utils.PrintUtils;
+import cards.Card;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
-
 public class Library {
-	private final ArrayList<Card> cardsInLibrary;
+	private final LinkedList<Card> cardsInLibrary;
 
-	private Library(ArrayList<Card> library) {
-		this.cardsInLibrary = Preconditions.checkNotNull(library);
+	private Library(List<Card> library) {
+		this.cardsInLibrary = Lists.newLinkedList(Preconditions.checkNotNull(library));
 	}
 	
 	public static Library fromDeckList(Map<Card, Integer> decklist) {
@@ -25,8 +30,14 @@ public class Library {
 		return new Library(cards);
 	}
 
-	public ArrayList<Card> getCardsInLibrary() {
-		return cardsInLibrary;
+	public List<Card> removeCardsFromTop(int numCards) {
+		List<Card> cards = Lists.newArrayList();
+		
+		for(int n = 0; n < numCards; n++) {
+			cards.add(this.cardsInLibrary.pop());
+		}
+		
+		return cards;
 	}
 	
 	public void shuffle() {
@@ -35,22 +46,6 @@ public class Library {
 	
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-
-		builder.append("[");
-
-		int i = 0;
-		for(Card card : this.cardsInLibrary) {
-			builder.append(card.getName());
-			
-			if(i < this.cardsInLibrary.size() - 1) {
-				builder.append(", ");
-			}
-			i++;
-		}
-		builder.append("]");
-		
-		//return Utils.toStringFromGetters(this);
-		return builder.toString();
+		return PrintUtils.cardsToString(this.cardsInLibrary);
 	}
 }

@@ -1,3 +1,4 @@
+package cards;
 public enum SuperType {
 	ARTIFACT,
 	CREATURE,

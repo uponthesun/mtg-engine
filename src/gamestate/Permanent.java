@@ -1,3 +1,6 @@
+package gamestate;
+import cards.Card;
+
 public class Permanent {
 	public enum TappedStatus {
 		TAPPED,
@@ -25,10 +28,6 @@ public class Permanent {
 		return tappedStatus;
 	}
 
-	public void setTappedStatus(TappedStatus tappedStatus) {
-		this.tappedStatus = tappedStatus;
-	}
-
 	public Card getCard() {
 		return card;
 	}
@@ -37,15 +36,23 @@ public class Permanent {
 		return markedDamage;
 	}
 
-	public void setMarkedDamage(int markedDamage) {
-		this.markedDamage = markedDamage;
-	}
-
 	public SummoningSickStatus getSummoningSickStatus() {
 		return summoningSickStatus;
 	}
 
-	public void setSummoningSickStatus(SummoningSickStatus summoningSickStatus) {
-		this.summoningSickStatus = summoningSickStatus;
+	/*********************************************************
+	 * Mutators
+	 *********************************************************/
+	
+	public void tap() {
+		this.tappedStatus = TappedStatus.TAPPED;
+	}
+	
+	public void untap() {
+		this.tappedStatus = TappedStatus.UNTAPPED;
+	}
+	
+	public void clearMarkedDamage() {
+		this.markedDamage = 0;
 	}
 }

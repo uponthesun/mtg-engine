@@ -1,3 +1,4 @@
+package cards;
 import com.google.common.collect.Sets;
 
 public class Cards {

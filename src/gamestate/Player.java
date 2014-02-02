@@ -1,4 +1,8 @@
+package gamestate;
 import java.util.List;
+
+import utils.Utils;
+import cards.Card;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
@@ -6,6 +10,7 @@ import com.google.common.collect.Lists;
 
 public class Player {
 	public static final int STARTING_LIFE_TOTAL = 20;
+	public static final int STARTING_HAND_SIZE = 7;
 	
 	private int lifeTotal;
 	private final List<Card> hand;	
@@ -23,10 +28,6 @@ public class Player {
 		return lifeTotal;
 	}
 
-	public void setLifeTotal(int lifeTotal) {
-		this.lifeTotal = lifeTotal;
-	}
-
 	public List<Card> getHand() {
 		return hand;
 	}
@@ -37,6 +38,11 @@ public class Player {
 
 	public List<Permanent> getPermanents() {
 		return permanents;
+	}
+
+	public void drawCards(int numCards) {
+		List<Card> newCards = this.library.removeCardsFromTop(numCards);
+		this.hand.addAll(newCards);
 	}
 	
 	@Override
