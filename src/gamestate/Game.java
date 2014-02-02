@@ -104,6 +104,10 @@ public class Game {
 		this.activePlayerIndex = (this.activePlayerIndex+1) % this.players.length;
 	}
 	
+	private void playersGetPriority() {
+		
+	}
+	
 	public void printGame() {
 		StringBuilder builder = new StringBuilder();
 		//builder.append(String.format("** TURN %d **\n", this.turnNumber));
