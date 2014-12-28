@@ -8,7 +8,7 @@ public class CombatDamage implements Step {
 	@Override
 	public GivePriority beginningAction(Game game) {
 		// TODO Auto-generated method stub
-		return null;
+		return GivePriority.TRUE;
 	}
 
 	@Override

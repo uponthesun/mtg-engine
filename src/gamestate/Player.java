@@ -8,7 +8,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
 
-public class Player {
+public abstract class Player {
 	public static final int STARTING_LIFE_TOTAL = 20;
 	public static final int STARTING_HAND_SIZE = 7;
 	
@@ -24,6 +24,39 @@ public class Player {
 		this.permanents = Lists.newArrayList();
 	}
 
+	public static class ReceivePriorityResult {
+		private final Effect effect;
+		private final Boolean retainPriority;
+		
+		private ReceivePriorityResult(Effect effect, Boolean retainPriority) {
+			this.effect = effect;
+			this.retainPriority = retainPriority;
+		}
+		
+		public static ReceivePriorityResult noAction() {
+			return new ReceivePriorityResult(null, null);
+		}
+		
+		public static ReceivePriorityResult action(Effect effect, boolean retainPriority) {
+			Preconditions.checkNotNull(effect);
+			return new ReceivePriorityResult(effect, retainPriority);
+		}
+
+		public Effect getEffect() {
+			return effect;
+		}
+
+		public Boolean retainPriority() {
+			return retainPriority;
+		}
+		
+		public boolean actionTaken() {
+			return this.effect != null;
+		}
+	}
+	
+	public abstract ReceivePriorityResult receivePriority(Game game);
+	
 	public int getLifeTotal() {
 		return lifeTotal;
 	}

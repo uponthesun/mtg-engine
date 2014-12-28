@@ -1,5 +1,9 @@
 package gamestate;
+import gamestate.Player.ReceivePriorityResult;
+
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 
 import turnstructure.Step;
@@ -22,6 +26,8 @@ public class Game {
 	private int turnNumber;
 	private final Player[] players;
 	private int activePlayerIndex;
+	
+	private final Deque<Effect> stack = new ArrayDeque<>();
 	
 	public Game(Player ...players) {
 		this.players = players;
@@ -85,27 +91,75 @@ public class Game {
 			player.drawCards(Player.STARTING_HAND_SIZE);
 		}
 	}
-	
+
 	private void takeTurn() {
 		for(Step currentStep : STANDARD_TURN_STEPS) {
 			IO.print("-- %s step --", currentStep.getClass().getSimpleName());
 			GivePriority givePriority = currentStep.beginningAction(this);
 			
 			this.printGame();
-			
+
 			if(givePriority == GivePriority.TRUE) {
 				IO.print("Priority\n");
+
+				/* After the turn-specific actions are completed, if the players receive priority, then
+				 * all players receive priority in succession, starting with active player. When all players
+				 * pass in succession, 
+				 */
+				while(true) {
+					this.playersGetPriority();
+					
+					if(this.stack.isEmpty()) {
+						break;
+					}
+					
+					Effect effect = this.stack.removeFirst();
+					//TODO: implement resolving effects
+					IO.print("Resolving effect: " + effect);
+				}
 			}
+		}
+	}
+	
+	// All players get priority in order, starting with active player
+	private void playersGetPriority() {
+		int numPlayersPassedInSuccession = 0;
+		int playerWithPriorityIndex = this.activePlayerIndex;
+
+		/* All players must pass in succession before the game advances
+		 * (i.e. resolves effects from the stack or continues to the next step.) */
+		while(numPlayersPassedInSuccession < this.players.length) {
+			final Player playerWithPriority = this.players[playerWithPriorityIndex];
+
+			/* When one player receives priority, they may either perform an action or pass.
+			 * If they perform an action, then they may choose to either retain priority
+			 * (in which case they have the chance to perform another action), or not.
+			 * TODO: cleanup?
+			 */
+			boolean playerTookAtLeastOneAction = false;
+			while(true) {
+				final ReceivePriorityResult result = playerWithPriority.receivePriority(this);
+				playerTookAtLeastOneAction |= result.actionTaken();
+
+				if(!result.actionTaken() || !result.retainPriority()) {
+					break;
+				}
+			}
+
+			IO.print("playerTookAtLeastOneAction: %s playerWithPriorityIndex: %d numPlayersPassedInSuccession: %d", 
+					playerTookAtLeastOneAction, playerWithPriorityIndex, numPlayersPassedInSuccession);
+			if(playerTookAtLeastOneAction) {
+				numPlayersPassedInSuccession = 0;
+			}
+			
+			numPlayersPassedInSuccession++;
+			playerWithPriorityIndex = (playerWithPriorityIndex + 1) % this.players.length;
 		}
 	}
 
 	private void advanceTurn() {
 		this.turnNumber++;
 		this.activePlayerIndex = (this.activePlayerIndex+1) % this.players.length;
-	}
-	
-	private void playersGetPriority() {
-		
 	}
 	
 	public void printGame() {
