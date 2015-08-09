@@ -7,6 +7,10 @@ public class IO {
 
 	private static final Scanner SCANNER = new Scanner(System.in);
 	
+	public static void print(Object o) {
+		print(o.toString());
+	}
+	
 	public static void print(String output) {
 		if(debug) {
 			System.out.println(output);

@@ -19,8 +19,8 @@ public class Main {
 		decklist.put(Cards.GRIZZLY_BEARS, 40);
 		decklist.put(Cards.FOREST, 20);
 		
-		Player p1 = new HumanPlayer(Library.fromDeckList(decklist));
-		Player p2 = new HumanPlayer(Library.fromDeckList(decklist));
+		Player p1 = new HumanPlayer("Player1", Library.fromDeckList(decklist));
+		Player p2 = new HumanPlayer("Player2", Library.fromDeckList(decklist));
 		
 		Game game = new Game(p1, p2);
 		

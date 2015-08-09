@@ -3,7 +3,7 @@ import com.google.common.collect.Sets;
 
 public class Cards {
 	public static final Card GRIZZLY_BEARS = Card.creatureCard("Grizzly Bears", 
-			ManaCost.manaCostFromSymbols("1G"), 
+			ManaAmount.manaCostFromSymbols("1G"), 
 			Sets.newHashSet(SuperType.CREATURE), 
 			Sets.newHashSet("Bear"), 
 			"", 

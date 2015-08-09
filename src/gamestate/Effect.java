@@ -1,5 +1,6 @@
 package gamestate;
 
-public abstract class Effect {
-
+public interface Effect {
+	//TODO: figure out signatures
+	public void applyEffect(Game game);
 }

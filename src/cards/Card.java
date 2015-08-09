@@ -1,21 +1,25 @@
 package cards;
+import gamestate.Game;
+import gamestate.PayableEffect;
+
 import java.util.Set;
 
+import utils.IO;
 import utils.Utils;
 
 import com.google.common.base.Preconditions;
 
-public class Card {
+public abstract class Card implements PayableEffect {
 	private final String name;
-	private final ManaCost manaCost;
+	private final ManaAmount manaCost;
 	private final Set<SuperType> superType;
 	private final Set<String> subType;
 	private final String rulesText;
 	private final Integer power;
 	private final Integer toughness;
-	
-	private Card(String name, ManaCost manaCost, Set<SuperType> superTypes, Set<String> subType, String rulesText,
-			Integer power, Integer toughness) {
+
+	private Card(final String name, final ManaAmount manaCost, final Set<SuperType> superTypes,
+			final Set<String> subType, final String rulesText, final Integer power, final Integer toughness) {
 		this.name = Preconditions.checkNotNull(name);
 		this.manaCost = manaCost;
 		this.superType = Preconditions.checkNotNull(superTypes);
@@ -25,23 +29,45 @@ public class Card {
 		this.toughness = toughness;
 	}
 
-	public static Card creatureCard(String name, ManaCost manaCost, Set<SuperType> superTypes, Set<String> subType, 
-			String rulesText, int power, int toughness) {
+	public static Card creatureCard(final String name, final ManaAmount manaCost, final Set<SuperType> superTypes,
+			final Set<String> subType, final String rulesText, final int power, final int toughness) {
 		Preconditions.checkArgument(superTypes.contains(SuperType.CREATURE));
-		return new Card(name, manaCost, superTypes, subType, rulesText, power, toughness);
+		//TODO: add implementation
+		return new Card(name, manaCost, superTypes, subType, rulesText, power, toughness) {
+			@Override
+			public void applyEffect(final Game game) {
+				IO.print("<Effect of %s>", getName());
+			}
+		};
 	}
-	
-	public static Card noncreatureCard(String name, ManaCost manaCost, Set<SuperType> superTypes, Set<String> subType, 
-			String rulesText) {
+
+	public static Card noncreatureCard(final String name, final ManaAmount manaCost, final Set<SuperType> superTypes,
+			final Set<String> subType, final String rulesText) {
 		Preconditions.checkArgument(!superTypes.contains(SuperType.CREATURE));
-		return new Card(name, manaCost, superTypes, subType, rulesText, null, null);
+		// TODO: add implementation
+		return new Card(name, manaCost, superTypes, subType, rulesText, null, null) {
+			@Override
+			public void applyEffect(final Game game) {
+				IO.print("<Effect of %s>", getName());
+			}
+		};
 	}
-	
+
+	//TODO: actual cost implementation, blocked on mana
+	@Override
+	public boolean canPayCost(final Game game) {
+		return true;
+	}
+
+	@Override
+	public void payCost(final Game game) {
+	}
+
 	public String getName() {
 		return name;
 	}
 
-	public ManaCost getManaCost() {
+	public ManaAmount getManaCost() {
 		return manaCost;
 	}
 
@@ -64,7 +90,7 @@ public class Card {
 	public Integer getToughness() {
 		return toughness;
 	}
-	
+
 	@Override
 	public String toString() {
 		return Utils.toStringFromGetters(this);
@@ -76,17 +102,17 @@ public class Card {
 				.add("toughness", this.toughness)
 				.toString();*/
 	}
-	
+
 	@Override
-	public boolean equals(Object o) {
+	public boolean equals(final Object o) {
 		if(o == null || !(o instanceof Card)) {
 			return false;
 		}
-		
-		Card c = (Card) o;
+
+		final Card c = (Card) o;
 		return this.getName().equals(c.getName());
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return this.getName().hashCode();

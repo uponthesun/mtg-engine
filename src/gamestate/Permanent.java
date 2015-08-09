@@ -1,4 +1,8 @@
 package gamestate;
+import java.util.List;
+
+import com.google.common.collect.Lists;
+
 import cards.Card;
 
 public class Permanent {
@@ -40,6 +44,11 @@ public class Permanent {
 		return summoningSickStatus;
 	}
 
+	//TODO: implement when abilities are implemented
+	public List<PayableEffect> getActivatedAbilities() {
+		return Lists.newArrayList();
+	}
+	
 	/*********************************************************
 	 * Mutators
 	 *********************************************************/

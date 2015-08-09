@@ -2,12 +2,12 @@ package utils;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import com.google.common.base.Objects;
-import com.google.common.base.Objects.ToStringHelper;
+import com.google.common.base.MoreObjects;
+import com.google.common.base.MoreObjects.ToStringHelper;
 
 public class Utils {
 	public static String toStringFromGetters(Object o) {
-		ToStringHelper helper = Objects.toStringHelper(o);
+		ToStringHelper helper = MoreObjects.toStringHelper(o);
 		Class<?> c = o.getClass();
 		
 		for(Method method : c.getMethods()) {
